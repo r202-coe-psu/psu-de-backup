@@ -1,0 +1,2 @@
+[psu_de]
+dash ansible_host=10.0.1.10 

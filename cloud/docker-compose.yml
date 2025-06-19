@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:7.0
-    container_name: mongodb
+    container_name: cloud-mongodb
     restart: unless-stopped
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -11,11 +9,39 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
-      - mongodb_network
+      - default
+
+  acquisition:
+    build: .
+    container_name: cloud-acquisition
+    env_file:
+      - .env
+    networks:
+      - default
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    command: /venv/bin/python -u /app/psu_de/acquisition.py
+
+  dash:
+    build: .
+    container_name: cloud-dash
+    ports:
+      - "8050:8050"
+      - "2222:22"
+    env_file:
+      - .env
+    networks:
+      - default
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    command: /venv/bin/python -u /app/psu_de/dashapp.py
 
 volumes:
   mongodb_data:
 
+
 networks:
-  mongodb_network:
+  default:
     driver: bridge
