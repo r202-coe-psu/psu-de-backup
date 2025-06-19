@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  backup:
+    build: .
+    container_name: backup
+    volumes:
+      - ./data:/app/data
+      - ./backups:/app/backups
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *
+    restart: unless-stopped
