@@ -10,12 +10,16 @@ RUN apt-get update && apt-get install -y \
     python3-wheel \
     python3-venv \
     sudo \
+    wget \
     openssh-server
+
+RUN wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-debian12-x86_64-100.12.2.deb && \
+    apt install ./mongodb-database-tools-*.deb && \
+    rm -f mongodb-database-tools-*.deb
 
 RUN useradd -m -s /bin/bash -d /home/psu psu
 RUN usermod -aG sudo psu
 RUN echo 'psu:coe' | chpasswd
-
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
@@ -32,3 +36,5 @@ RUN . /venv/bin/activate \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --only main
 
+
+# USER psu
