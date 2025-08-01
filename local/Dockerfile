@@ -1,7 +1,7 @@
 FROM debian:sid
 
 # comment this line if you are outside PSU
-RUN echo 'deb http://mirror.psu.ac.th/debian/ sid main contrib non-free non-free-firmware' > /etc/apt/sources.list
+# RUN echo 'deb http://mirror.psu.ac.th/debian/ sid main contrib non-free non-free-firmware' > /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
     git \
